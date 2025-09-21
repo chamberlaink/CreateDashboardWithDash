@@ -48,8 +48,8 @@ app.layout = html.Div([
     html.Div(dcc.Dropdown(
             id='select-year',
             options=[{'label': i, 'value': i} for i in year_list],
-            placeholder ='Select-year',
-            value='Select-year'
+            placeholder ='select-year',
+            value='select-year'
         )),
     #TASK 2.3: Add a division for output display
     html.Div(id='output-container', className='chart-grid', style={'display':'flex'})
@@ -96,7 +96,7 @@ def update_output_container(input_year, selected_statistics):
         #Hint:Use Vehicle_Type and Automobile_Sales columns
         average_sales = recession_data.groupby('Vehicle_Type')['Automobile_Sales'].mean().reset_index()                 
         R_chart2  = dcc.Graph(
-            figure=px.bar(recession_data,
+            figure=px.bar(average_sales,
             x='Vehicle Type',
             y='Automobile Sales',
             title="Average Automobile Sales Per Vehicle Type"))
@@ -106,7 +106,7 @@ def update_output_container(input_year, selected_statistics):
     # Hint:Use Vehicle_Type and Advertising_Expenditure columns
         exp_rec= recession_data.groupby('Vehicle_Type')['Advertising_Expenditure'].mean().reset_index()
         R_chart3 = dcc.Graph(
-                    figure=px.pie(recession_data,
+                    figure=px.pie(exp_rec,
                     values='Advertising_Expenditure',
                  names='Vehicle_Type',
                  title="Total Expenditure Share Per Vehicle Type During Recessions"
@@ -176,12 +176,13 @@ def update_output_container(input_year, selected_statistics):
 
 #TASK 2.6: Returning the graphs for displaying Yearly data
         return [
-                html.Div(className='chart-item', children=[html.Div(children=Y_chart1),html.Div(children=Y_chart2)],style={'display':'flex'}),
-                html.Div(className='chart-item', children=[html.Div(children=Y_chart3),html.Div(children=Y_chart4)],style={'display': 'flex'})
-        ]
+                    html.Div(className='chart-item', children=[html.Div(children=Y_chart1),html.Div(children=Y_chart2)],style={'display':'flex'}),
+                    html.Div(className='chart-item', children=[html.Div(children=Y_chart3),html.Div(children=Y_chart4)],style={'display': 'flex'})
+                    ]
     else:
         return None
 
 # Run the Dash app
 if __name__ == '__main__':
-    app.run(port=8090)
+    app.run(debug=True)
+
