@@ -25,8 +25,8 @@ app = dash.Dash(__name__)
 #---------------------------------------------------------------------------------
 # Create the dropdown menu options
 dropdown_options = [
-    {'label': '...........', 'value': 'Yearly Statistics'},
-    {'label': 'Recession Period Statistics', 'value': '.........'}
+    {'label': 'Yearly Statistics', 'value': 'Yearly Statistics'},
+    {'label': 'Recession Period Statistics', 'value': 'Recession Period Statistics'}
 ]
 # List of years 
 year_list = [i for i in range(1980, 2024, 1)]
@@ -40,19 +40,16 @@ app.layout = html.Div([
         html.Label("Select Statistics:"),
         dcc.Dropdown(
             id='dropdown-statistics',
-            options=[
-                {'label':'Yearly Statistics', 'value':'Yearly Statistics'},
-                {'label':'Recession Period Statistics', 'value':'Recession Period Statistics'}
-            ],
-            value='Select Statistics',
-            placeholder='Select a report type'
-        )
+            options=dropdown_options,
+            placeholder='Select a report type',
+            value='Select Statistics'        
+            )
     ]),
     html.Div(dcc.Dropdown(
             id='select-year',
             options=[{'label': i, 'value': i} for i in year_list],
-            placeholder = 'select_year',
-            value='select_year'
+            placeholder ='Select-year',
+            value='Select-year'
         )),
     #TASK 2.3: Add a division for output display
     html.Div(id='output-container', className='chart-grid', style={'display':'flex'})
@@ -73,7 +70,7 @@ def update_input_container(selected_statistics):
 # Define the callback function to update the input container based on the selected statistics
 @app.callback(
     Output(component_id='output-container', component_property='children'),
-    [Input(component_id='dropdown-statistics', component_property='value'), 
+    [Input(component_id='dropwdown-statistics', component_property='value'), 
     Input(component_id='select-year', component_property='value')])
 
 
@@ -126,7 +123,6 @@ def update_output_container(input_year, selected_statistics):
         color = 'Vehicle_Type',
         labels={'unemployment_rate': 'Unemployment Rate', 'Automobile_Sales': 'Average Automobile Sales'},
         title='Effect of Unemployment Rate on Vehicle Type and Sales'))
-
 
         return [
              html.Div(className='chart-item', children=[html.Div(children=R_chart1),html.Div(children=R_chart2)],style={'display': 'flex'}),
@@ -188,4 +184,4 @@ def update_output_container(input_year, selected_statistics):
 
 # Run the Dash app
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run(port=8090)
